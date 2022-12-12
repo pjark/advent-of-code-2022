@@ -60,7 +60,7 @@ def part1():
         for line in f:
             opp_move, player_move = line.split()
             total_score += player_score_dict[player_move] + get_outcome(opp_move, player_move)
-    print("\nTotal score is: "+str(total_score))
+    print("\nPart 1 total score is: "+str(total_score))
 
 def part2():
     with open(sys.argv[1]) as f:
@@ -68,7 +68,7 @@ def part2():
         for line in f:
             opp_move, result = line.split()
             total_score += get_round_score(opp_move, result)
-    print("\ntotal_score is: "+str(total_score))
+    print("\nPart 2 total score is: "+str(total_score))
 
 import sys
 
@@ -76,5 +76,5 @@ import sys
 if len(sys.argv) != 2:
     sys.exit("[ERROR: Carmy] Input error!")
 
-# part1()
+part1()
 part2()
