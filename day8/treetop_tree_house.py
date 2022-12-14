@@ -11,6 +11,12 @@ def print_adj_list(adj_list):
     for key in adj_list:
         print(key, " -> ", adj_list[key])
 
+def dict_find_max_val(dictionary):
+    vals = []
+    for key in dictionary:
+        vals.append(dictionary[key])
+    return max(vals)
+
 def create_matrix(input):
     matrix = {} # create matrix
     value_table = [[] for _ in range(len(input))]
@@ -93,15 +99,36 @@ def find_not_visible_trees(adj_list, value_dict):
             visible_inner_trees.add(tree)
     return len(not_visible_trees)
 
-def part1():
+def calculate_scenic_scores(adj_list, height):
+    scenic_scores = {} 
+    for start_tree in adj_list:
+        viewing_distances = {'left':1, 'right':1, 'up':1, 'down':1}
+        for direction in viewing_distances:
+            viewing_distance = 0
+            for adj_tree in adj_list[start_tree][direction]:
+                viewing_distance += 1
+                if height[adj_tree] >= height[start_tree]:
+                    break
+            viewing_distances[direction] = viewing_distance
+        tree_scenic_score = 1
+        for direction in viewing_distances:
+            tree_scenic_score *= viewing_distances[direction]
+        scenic_scores[start_tree] = tree_scenic_score
+        
+    return scenic_scores
+
+def part1andpart2():
     input = get_input_from_file(sys.argv[1])
     value_table, matrix = create_matrix(input)
     adj_list = create_adj_list(matrix, 0, len(value_table[0])-1); # print_adj_list(adj_list)
     num_not_visible = find_not_visible_trees(adj_list, matrix); # print("\ntotal trees =", len(matrix.keys()), "\n# of trees not visible =", num_not_visible)
+    scenic_scores = calculate_scenic_scores(adj_list, matrix); # print("\nscenic scores:\n", scenic_scores)
     print("\nPart 1: Number of visible trees visible from outside the grid =", len(matrix.keys()) - num_not_visible)
+    print("\nPart 2: Max scenic score for any tree =", dict_find_max_val(scenic_scores))
+    print("\t(gonna be honest idk if the scenic scores by tree is right, but it does find the correct maximum scenic score)")
 
 import sys, re
 if len(sys.argv) != 2:
     sys.exit("[ERROR: Carmen] Invalid input arguments!")
 
-part1()
+part1andpart2()
