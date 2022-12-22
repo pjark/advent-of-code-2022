@@ -1,9 +1,2 @@
-def part1():
-    # testing mac git stuff part 2
-    pass
-
-import sys, re 
-if len(sys.argv) != 2:
-    sys.exit("[ERROR: Carmen] Invalid input args")
-
-part1()
+# solution given by google sheet found here:
+# https://docs.google.com/spreadsheets/d/1mMkSWwCTq9qwkePjteYTiTzY-TwPj6xcNy6Ivyw-ndY/edit#gid=0
