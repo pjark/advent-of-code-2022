@@ -43,30 +43,37 @@ def cpu(input):
 
 def update_crt(crt): return [crt-1, crt, crt+1]
 
-def draw_render(draw):
+def draw_render(row):
     print('')
-    newlines = [n for n in range(39, 240, 40)]
-    for i in range((len(draw))):
-        print(draw[i], end='')
-        if i in newlines: print('')
+    for i in range((len(row))):
+        print(row[i], end='')
     print('')
 
 def render(queue):
-    crt = 1
-    crt_pos = update_crt(crt)
+    # crt = 40 positions, 6 rows
+    row = 0
+    sprite_middle = 1
+    sprite_pos = [sprite_middle-1, sprite_middle, sprite_middle+1]
+    newlines = [n for n in range(40, 241, 40)]
+    rows = [[] for n in range(6)]
+    pixels = ['.' for _ in range(40)]
 
-    pixels = ['.' for _ in range(240)]
+    for cycle in range(1, 241):
+        position = cycle - (40 * row) - 1
 
-    for pixel in range(240):
-        if pixel in crt_pos: pixels[pixel] = '#'
-
-        cycle = pixel + 1
-        if cycle == queue[0][0]:
-            crt += queue[0][1]
-            crt_pos = update_crt(crt)
+        if (cycle - 1) == queue[0][0]:
+            sprite_middle += queue[0][1]
             queue.pop(0)
+            sprite_pos = [sprite_middle-1, sprite_middle, sprite_middle+1]
 
-    draw_render(pixels)
+        if position in sprite_pos: pixels[position] = '#'
+
+        if cycle in newlines:
+            rows[row] = pixels 
+            row += 1
+            pixels = ['.' for _ in range(40)]
+
+    print(''); [print(''.join(r)) for r in rows]; print('')
 
 def main():
     if len(sys.argv) != 2: sys.exit("\n[ERROR] Invalid input args!")
@@ -74,10 +81,10 @@ def main():
     ### Part 1
     input = get_input_from_file(sys.argv[1])
     signal_strengths, command_queue = cpu(input)
-    # print("\nPart 1: Sum of signal strengths =", sum(signal_strengths))
+    print("\nPart 1: Sum of signal strengths =", sum(signal_strengths), "\n")
 
     ### Part 2
-    render(command_queue)
+    print("Part 2: \nThe capital letters will be displayed below:", end=''); render(command_queue)
 
 if __name__ == '__main__':
     main()
